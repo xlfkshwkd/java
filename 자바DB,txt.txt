@@ -1,0 +1,254 @@
+package sim;
+
+import java.awt.*;
+import java.sql.*;
+import java.awt.event.*;
+
+import java.util.*;
+import java.io.*;
+
+import javax.swing.*;
+
+import javax.swing.border.*;
+
+
+public class sim extends JFrame implements ActionListener,ItemListener{
+	FileReader in=null;
+	FileWriter out=null;
+	String ta;
+	
+   private JPanel p, p1, p2, p3, p4,p5,p6;
+      private JLabel l1, l2, l3, l4, l5;
+      private JTextField t1, t2, t3, t4, t5;
+      private JTextArea a;
+      private JButton j1, j2,j3,j4,j5 ,j6;
+
+      Student stu[]=new Student[100];
+      static int count=0;
+
+      String getname,getstnum,getlang,getengl,getmath;
+
+      int lang,engl,math;
+
+      sim(){
+
+      this.setSize(1000, 700);
+
+         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+         this.setTitle("성적계산 프로그램");
+  
+         p = new JPanel();
+         p1 = new JPanel();
+         p2 = new JPanel();
+         p3 = new JPanel();
+         p4 = new JPanel();
+
+         l1 = new JLabel("이름");
+         l2 = new JLabel("학번");
+         l3 = new JLabel("국어");
+         l4 = new JLabel("영어");
+         l5 = new JLabel("수학");
+
+         t1 = new JTextField(20);
+         t2 = new JTextField(20);
+         t3 = new JTextField(20);
+         t4 = new JTextField(20);
+         t5 = new JTextField(20);
+         a = new JTextArea(100,50);
+
+         j1 = new JButton("저장 출력");
+         j2 = new JButton("종료");
+         j3 = new JButton("파일저장");
+         j4 = new JButton("파일출력");
+         j5 = new JButton("DB저장");
+         j6 = new JButton("DB출력");
+
+         add(p);
+         p.add(p1);
+         p.add(p2);
+         p.add(p3);
+         p.add(p4);
+
+         p.setLayout(new GridLayout(4,0));
+         p1.setSize(1000,110);
+         p2.setSize(1000,110);
+         p3.setSize(1000,110);
+         p4.setSize(1000,110);
+
+         p1.add(l1);
+         p1.add(t1);
+         p1.add(l2);
+         p1.add(t2);
+        
+         p2.add(l3);
+         p2.add(t3);   
+         p2.add(l4);
+         p2.add(t4);
+         p2.add(l5);
+         p2.add(t5);
+        
+         p3.add(a);
+        
+         p4.add(j1);
+         p4.add(j2);
+         p4.add(j3);
+         p4.add(j4);
+         p4.add(j5);
+         p4.add(j6);
+
+         j1.addActionListener(this);
+         j2.addActionListener(this);
+         j3.addActionListener(this);
+         j4.addActionListener(this);
+         j5.addActionListener(this);
+         j6.addActionListener(this);
+
+         setVisible(true);
+   }
+
+   public void actionPerformed(ActionEvent e) {
+
+         if(e.getSource()==j1){
+            getname=t1.getText();
+            getstnum=t2.getText();
+            getlang=t3.getText();
+            getengl=t4.getText();
+            getmath=t5.getText();
+
+            lang=Integer.parseInt(getlang);
+            engl=Integer.parseInt(getengl);
+            math=Integer.parseInt(getmath);
+
+
+
+            stu[count]=new Student(getname,getstnum,lang,engl,math);
+            stu[count].cal(this);
+            count++;
+
+            for(int i=0; i<count; i++) {
+                a.append(stu[i].out());
+              }
+         }
+         else if (e.getSource() == j2){
+            System.exit(0);
+         }
+         else if (e.getSource() == j3) {
+      
+       	  String ta =a.getText();
+       	  System.out.println(ta);
+       	  try {
+       		  out=new FileWriter("c://temp/save.txt");
+       	   out.write(ta);
+       	   a.setText("정상대로 저장되었습니다");
+       	   out.close();
+       	  } catch (IOException er) {
+       	   er.printStackTrace();
+
+       	  }
+
+         }
+         else if (e.getSource() == j4){
+        	 a.setText("");
+       	  BufferedReader br = null;
+             try {
+                 br = new BufferedReader(new FileReader("c://temp/save.txt"));
+                 String line=br.readLine();
+                 while (line != null) {
+               	  System.out.println(line);
+                     a.append(line+"\n");
+                     line = br.readLine();
+                 }
+                 br.close();
+             } catch (FileNotFoundException er) {
+                 er.printStackTrace();
+             } catch (IOException er) {
+                 er.printStackTrace();
+             }
+          }
+         else if (e.getSource() == j5){
+            String getname=t1.getText();
+        	String getstnum=t2.getText();
+        	String getlang=t3.getText();
+        	String getengl=t4.getText();
+        	String getmath=t5.getText();
+        	 
+        	try {
+        		Connection conn=makeConnection();
+        		Statement stmt =conn.createStatement();
+        		stmt.executeUpdate("INsert INTO Scores VALUES ('" +getname +
+        				"'," +getstnum '"," +getlang+ '","+ getengl '"+ getmath ")" );
+        		conn.close();
+        	}
+        	catch (SQLException e)
+        	{
+        		System.err.println(e.getMessage());
+        	}
+        	model.fillTable();
+        	}
+         else if (e.getSource() == j6){
+            try {
+            	Connection conn =makeConnection();
+            	Statement stmt =conn.createStatement();
+            	ResultSet rs = stmt
+            			.executeQuery("Select * from score ORDER BY score DEsc LIMIT"+ROWS);
+            int row =0;
+            while(rs.next()) {
+            	data[row][0]=rs.getString("getname");
+            	data[row][1]=rs.getString("getstnum");
+            	data[row][2]=rs.getString("getlang");
+            	data[row][3]=rs.getString("getengl");
+            	data[row][4]=rs.getString("getmath");
+            row++;	
+            }
+            conn.close();
+            }
+            catch(SQLException e)
+            {
+            	System.err.println("Caught EXception:" + e.getMessage());
+            }
+            fireTableDateChanged();
+          }
+      }
+   public static void main(String[] args) {
+      new sim();
+   }
+   public static Connection makeConnection()
+   {
+         String url = "jdbc:mysql://localhost/Score";
+         String id = "root";
+         String password = "1234";
+         Connection con = null;
+         try {
+                Class.forName("com.mysql.jdbc.Driver");
+                System.out.println("드라이버 적재 성공");
+                con = DriverManager.getConnection(url, id, password);
+                System.out.println("데이터베이스 연결 성공");
+         } catch (ClassNotFoundException e) {
+                System.out.println("드라이버를 찾을 수 없습니다.");
+         } catch (SQLException e) {
+                System.out.println("연결에 실패하였습니다.");
+         }
+         return con;
+   }
+   class Student{
+      String name,st_n;
+      int lang,engl,math,sum=0;
+      double ave;
+      Student(){}
+      Student(String n,String sn,int l,int e,int m){
+         this.name=n;
+         this.st_n=sn;
+         this.lang=l;
+         this.engl=e;
+         this.math=m;
+      }
+      void cal(sim s) {
+         sum=lang+engl+math;
+         ave=(double)sum/3.0;
+      }
+      String out() {
+         return "이름: "+name+"학번: "+st_n+"국어: "+lang+"수학: "+math+"영어: "+engl+"총점: "+sum+"평균: "+ave+"\n";
+      }
+   }
+}

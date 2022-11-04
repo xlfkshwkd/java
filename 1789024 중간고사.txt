@@ -1,0 +1,195 @@
+import java.util.Random;
+
+public class A0428 {
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+//            Math.random();
+
+            Random rnd = new Random();
+            int[] aaa = new int[10];
+            for (int i = 0; i < 10; i++) {
+                aaa[i] = rnd.nextInt(1000);
+            }
+            int minNum = 0;
+            int maxNum = 0;
+            for (int i = 0; i < 10; i++) {
+                if(i==0) {
+                    minNum = aaa[i];
+                    maxNum = aaa[i];
+                }
+                if(minNum>=aaa[i]){
+                    minNum = aaa[i];
+                }
+                if(maxNum<=aaa[i]){
+                    maxNum = aaa[i];
+                }
+
+            }
+
+            System.out.println(minNum);
+            System.out.println(maxNum);
+
+    }
+
+}
+_______________________________________________________________
+2.번
+public class A04281 {
+
+    public static void main(String[] args) {
+        final int ROW = 21;
+        int a[][]= new int[ROW][ROW];
+        for (int i = 0; i < ROW;i++) {
+            for (int j = 0; j < i; j++) {
+                a[i][j] = i*j;
+                System.out.print(i + " * " + j + " = " + i*j + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+}
+________________________________________________________________
+3.번
+import java.util.*;
+
+public class CircleTest {
+
+	public static void main(String[] args) {
+	
+		String mas;
+		Scanner scan=new Scanner(System.in);
+		
+		
+		Circle a=new Circle();
+		
+		Rectange b=new Rectange();
+		
+		Taraingle c=new Taraingle();
+		
+	for(int i=0;i<100;i++) {
+		System.out.print("어떠한것으로 할것이냐 C R T");
+			mas=scan.nextLine();
+		
+		if(mas=="C")
+		{
+			double r;
+			System.out.println("반지름 입력");
+			r=scan.nextDouble();
+			a.SetR(r);
+			a.getA(r);
+			a.calc(r);
+		}
+		else if(mas=="R")
+		{
+			int w,h;
+			System.out.println("밑 입력");
+			w=scan.nextInt();
+			System.out.println("높 입력");
+			h=scan.nextInt();
+			b.getA(w,h);
+			b.calc(w,h);
+		}
+		else if(mas=="T")
+		{
+			int w,h;
+			System.out.println("높이입력");
+			h=scan.nextInt();
+			System.out.println("밑변입력");
+			w=scan.nextInt();
+			c.T(w,h);
+			c.getA();
+		}
+		else if(mas=="q")
+		{
+			System.out.print("탈출");
+			break;
+		}
+
+		else
+		{
+			System.out.print("다시 입력\n");
+			continue;
+		}
+	}
+	}
+
+}
+import java.util.Scanner;
+
+public class Circle {
+	double r;
+	double pi=3.14;
+	double area;
+	void SetR(double r)
+	{
+		
+		System.out.println(pi*r*r +"면적");
+		System.out.println(2*pi*r +"둘래");
+	}
+	void getA(double r)
+	{
+		
+		System.out.println(r +"필드");
+
+	}
+	void calc(double r)
+	{
+		area=pi*r*r;
+		System.out.println("계산값저장");
+
+	}
+
+
+}
+import java.util.Scanner;
+
+public class Rectange {
+
+	int w;
+	int h;
+	int area;
+	void R(int w,int h)
+	{
+		
+		System.out.println(w*h+ "넓이");
+		System.out.println(2*h+2*w +"둘래");
+	}
+	void getA(int w,int h)
+	{
+		System.out.println("높이"+h+"가로"+w);
+	}
+	
+	void calc(int w,int h)
+	{
+		area=w*h;
+		System.out.println(" 저장");
+		
+	}
+}
+import java.util.Scanner;
+
+public class Taraingle {
+
+	int h,w;
+	int area;
+	void T(int w,int h)
+	{
+	
+		System.out.println(h*w/2+"넓이");
+		
+	}
+	void  getA(int w,int h)
+	{
+		System.out.println("높이"+ h +"밑변" + w );
+	}
+	void  calc(int w,int h)
+	{
+		area=h*w/2;
+		System.out.println("저장");
+	}
+}
+
+
+
