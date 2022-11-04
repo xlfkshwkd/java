@@ -1,0 +1,175 @@
+ create database company;
+ use company;
+
+create table department(
+    -> dname varchar(30),
+    -> dnumber int primary key,
+    -> mgrssn int,
+    -> mgrstartdate date);
+
+desc department;  //확인
+
+create table dept_locations(
+    -> dnumber int,
+    -> dlocation varchar(30),
+    -> primary key(dnumber, dlocation),
+    -> foreign key (dnumber) references department (dnumber));
+
+create table employee(
+     fname varchar(30),
+     minit char(1),
+     lname varchar(30),
+     ssn integer primary key,
+     bdate date,
+     address text,
+     sex char(1),
+     salary integer,
+     dno integer,
+     superssn integer,
+     foreign key (dno) references department (dnumber),
+     foreign key (superssn) references employee (ssn));
+
+
+alter table department add constraint dep_fk1 foreign key (mgrssn) references
+    -> employee (ssn);
+
+desc depatment;
+
+ select * from information_schema.table_constraints
+    -> where table_name="department";
+select * from information_schema.table_constraints
+    -> where table_name="employee";
+
+
+create table dependent(
+    -> essn integer,
+    -> dependent_name varchar(30),
+    -> sex char(1),
+    -> bdate date,
+    -> relationship varchar(15),
+    -> primary key(essn, dependent_name),
+    -> foreign key (essn) references employee (ssn));
+
+ create table project(
+    -> pname varchar(30),
+    -> pnumber integer primary key,
+    -> plocation varchar(50),
+    -> dnum integer,
+    -> foreign key (dnum) references department (dnumber));
+
+ create table works_on(
+     essn integer,
+     pno integer,
+     hours real,
+     primary key(essn,pno),
+     foreign key (essn) references employee (ssn),
+     foreign key (pno) references project (pnumber));
+
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+        values(1234,'John','Smith','1965/01/09','731 Fondren','M',30000,3334,5);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+        values(3334,'Franklin','Wong','1955/12/08','638 Voss','M',40000,8886,5);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+       values(4534,'Joyce','English','1972/07/31','291 Berry','F',25000,3334,5);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+       values(6668,'Ramesh','Narayan','1962/09/15','975 Oak','M',38000,3334,5);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,dno)
+       values(8886,'James','Borg','1937/11/10','450 Stone','M',55000,1);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+       values(9876,'Jennifer','Wallace','1941/01/19','291 Berry','F',43000,8886,4);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+       values(9879,'Ahmad','Jabber','1969/03/29','980 Dallas','M',25000,9876,4);
+insert into employee(ssn,fname,lname,bdate,address,sex,salary,superssn,dno)
+       values(9998,'Alicia','Zelaya','1968/01/19','3321 Castle','F',25000,9876,4);
+
+ SET foreign_key_checks = 1;
+ SET foreign_key_checks = 0;   수정가능하게해주는 코드~
+
+insert into department values('headquarters',1,8886,'1981/06/19');
+insert into department_sim values('adminstration',4,9876,'1995/1/1');
+insert into department_sim values('research',5,3334,'1988/05/22');
+
+
+insert into Dept_Locations values(1,'Houston');
+
+insert into Dept_Locations values(4,'Stafford');
+
+insert into Dept_Locations values(5,'BellaireHouston');
+
+insert into Dept_Locations values(5,'Superland');
+
+
+
+insert into project(pname,pnumber,plocation,dnum) 
+	values('ProductX',1,'Bellaire',5);
+insert into project(pname,pnumber,plocation,dnum) 
+	 values('ProductY',2,'Superland',5);
+insert into project values('ProductZ',3,'Houston',5);
+insert into project values('Computerzation',10,'Stafford',4);
+insert into project values('Reorg',20,'Houston',1);
+insert into project values('NewBenef',30,'Stafford',4);
+
+
+
+insert into works_on values(1234,1,32.5);
+insert into works_on values(1234,2,7.5);
+insert into works_on_sim values(1234,3,40);
+insert into works_on_sim values(3334,2,10);
+insert into works_on_sim values(3334,3,10);
+insert into works_on_sim values(3334,10,10);
+insert into works_on_sim values(3334,20,10);
+insert into works_on_sim values(4534,1,20);
+insert into works_on_sim values(4534,2,20);
+insert into works_on_sim values(8886,20,NULL);
+insert into works_on_sim values(9876,20,15);
+insert into works_on_sim values(9879,30,5);
+insert into works_on_sim values(9998,10,10);
+insert into works_on_sim values(9998,30,30);
+
+insert into dependent values(1234,'Mike','M','1988/09/09','son');
+insert into dependent values(3334,'Alice','F','1986/01/01','daughter');
+insert into dependent values(3334,'Joy','F','1958/03/03','Spouse');
+insert into dependent values(3334,'Theo','M','1983/05/05','son');
+insert into dependent values(9876,'Abner','M','1942/02/03','Spouse');
+--------------------------------------------------
+
+
+
+ update employee set superssn=3334 where ssn=1234;
+
+insert into employee(ssn,fname,lname,bdate,address,sex,salary)
+    -> values(9998,'Alicia','Zelaya','1958/01/19','3321 Castle','F',25000);
+
+insert into employee(ssn,fname,lname,bdate,address,sex,salary)
+    -> values(9976,'Jennifer','Wallace','1941/01/19','291 Berry','F',43000);
+
+ update employee set superssn=9976 where ssn=9998;
+
+
+
+insert into department values('reserch',5,3334,'1988/5/22');
+
+
+insert into project values ('ProductX',1,'Bellaire,5');
+insert into project values ('ProductY',2,'Sugerland',5');
+
+insert into dept_locations values (4,'Stafford');
+insert into dept_locations values (5,'BellaireHouston');
+insert into dept_locations values (5,'Sugarland');
+
+insert into department values('adminstration',5,9976,'1995/1/1');
+
+insert into project values ('ProductZ',1,'host','5');
+
+insert into works_on values(1234,1,32.5);
+insert into works_on values(3334,20,10,0);
+
+
+----못함
+
+insert into dependent values(3334,'Alice','F','1986/1/1','daughter');
+insert into dependent values(1234,'Mike','M','1988/9/9','son');
+
+
+
+

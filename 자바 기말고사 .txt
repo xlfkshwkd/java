@@ -1,0 +1,272 @@
+package credit;
+import java.util.*;
+
+
+public class Credit {
+   String item_name;   //상품명
+   String item_number; //상품번호
+   String sale_date;   //판매일
+   int sale_price;       //판매가격
+   String pay_mettod;     //지불방법
+   int orig_price; //원가
+   int profit;
+   
+   Shop_Item(String in, String nr, String d, int sp, String pm,){
+      this.item_name=in; this.item_number=nr; this.sale_date=d; this.sale_price=sp; this.pay_mettod=pm; 
+	this.orig_price=(sp/2 ) ;this.profit=(sp-orig_price);
+
+   }
+   
+   int profit_1(){
+	return this.profit;
+}
+   String out() {
+      return("상품명: " + item_name + " 상품번호: " + item_number +" 판매일: " + sale_date+" 판매가격: " +sale_price +
+            "\n 지불방법: " + pay_mettod +" 원가: " +orig_price +"이익: " + profit);
+   }
+    String getin()
+   {
+      return this.item_name;
+   }
+   String getnr()
+   {
+      return this.item_number;
+   }
+   String getdate()
+   {
+      return this.sale_date;
+   }
+   String getsp()
+   {
+      return this.sale_price;
+   }
+   String getpm()
+   {
+      return this.pay_mettod;
+   }
+   String getorig_price()
+   {
+      return this.orig_price;
+   }
+  String getprofit()
+   {
+      return this.profit;
+   }
+}
+
+ 라디오박스
+ r1 = new JRadioButton("신용카드");
+
+ r2 = new JRadioButton("현금");
+
+ r3 = new JRadioButton("기타");
+
+ButtonGroup pn = new ButtonGroup();
+
+ pn.add(r1);
+
+ pn.add(r2);
+
+ pn.add(r3);
+
+ r1.addItemListener(this);
+ r2.addItemListener(this);
+ r3.addItemListener(this); 
+
+ p3.add(r1);
+
+ p3.add(r2);
+
+ p3.add(r3);
+
+ Border border = BorderFactory.createTitledBorder("카드종류");
+
+ p3.setBorder(border);
+
+아이템
+
+public void itemStateChanged(ItemEvent e) {
+     
+
+      if(e.getItem() instanceof JRadioButton) {
+         if(r1.isSelected()) {
+              pm="신용카드";
+            }
+           if (r2.isSelected()) {
+               pm="현금";
+           }
+           if (r3.isSelected()) {
+               pm="기타";
+           }
+      }
+   }
+
+액션리스너
+
+ public void actionPerformed(ActionEvent e) {
+
+      if(e.getSource()==j1) // 버튼 1번 arrayList에 저장
+      {
+       a1.setText("");
+       ccnr =(String)number.getSelectedItem();   
+            in = t1.getText();
+           nr = t2.getText();
+            d  =t3.getText();
+            int sp  = Integer.parseInt(t4.getText());
+           if(Integer.parseInt(t4.getText() > 3000000 || Integer.parseInt(t4.getText() < 100) {
+              a1.setText("금액이 잘못입력되었습니다");
+           }
+           else {
+              cr[c]=new Credit(in,nr,d,sp,pm,orig_price,profit);
+              c++;
+           }
+      }
+      else if (e.getSource() == j2) {  // 계산
+         if(c == tmp)
+         {
+            a1.setText("");
+            a1.append(" 수익은 " +cr[c].profit_1()+"입니다");
+         }
+         else
+         {
+            sum=0;
+            for(int i=0; i<c; i++) {
+            sum=cr[i].profit_1();
+            }
+         a1.setText("");
+         a1.append("총 사용금액은 "+sum+"입니다");
+         tmp++;
+         }     
+      }
+      if (e.getSource() == j3) {  // ArrayList 출력
+         a1.setText("");
+         for(int i=0; i<c; i++) {
+           a1.append(rf[i].out()+"\n");
+         }
+      }
+      if (e.getSource() == j4) { //파일저장
+   {
+      try{
+                  FileWriter fw = new FileWriter("save.txt",true);    
+                  BufferedWriter bf = new BufferedWriter(fw);              
+         for(int = 0; i < c; i++)
+         {         
+                        bf.write(cr[i].out());
+                  bf.close();       
+                  FileReader fr = new FileReader("save.txt");    
+                  BufferedReader br = new BufferedReader(fr);    
+                  String str=null;
+                  while((str = br.readLine())!=null){
+                      System.out.println(str);
+                  }
+                  br.close();    
+                  }catch(Exception e1){
+                  System.out.println(e1.toString());
+                  }
+         }
+      if (e.getSource == j5) { //파일 출력
+          try {
+             FileReader fr = new FileReader("save.txt");
+             BufferedReader br = new BufferedReader(fr);
+             a.setText("");
+             String tmp = null;
+             while((tmp = br.readLine()) != null)
+             {
+                a.append(tmp+"\n");
+                System.out.println(tmp);
+             }
+             br.close();
+          }catch(Exception e2)
+          {
+             a.setText(e2.toString());
+          }
+        }
+      }
+   if (e.getSource() == j6) { //DB 저장
+      Connection con = makeConnect();
+      try {
+            Statement stmt = con.createStatement();
+            String s = "INSERT INTO sShop values ";
+            s += "(\""+ cr[c].getin() + "\",\"" + cr[c].getnr() + "\"," + cr[c].getdate() + "," +cr[c].getsp() + "," + cr[c].getpm(); + ",
+"+cr[c].getorig_price()+","+cr[c].getprofit()+");";
+
+            int i = stmt.executeUpdate(s);
+            if(i == 1) a1.setText("레코드 추가 성공");
+            else a1.setText("레코드 추가 실패");
+         }catch(SQLException e1)
+         {
+            a1.setText(e1.toString());
+         }
+      }
+   if(e.getSource() == j7) //DB 출력
+      {
+         a1.setText("");
+         Connection con = makeConnect();
+         try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = null;
+            String s = "select * from student";
+            rs = stmt.executeQuery(s);
+            while(rs.next())
+            {
+               a1.append("아이템이름 : "+rs.getString(1)+" ");
+               a1.append("아이템번호 : "+rs.getString(2)+" ");
+               a1.append("판매일시 : "+rs.getString(3)+" ");
+               a1.append("판매금액 : "+rs.getInt(4)+" ");
+               a1.append("수익 : "+rs.getString(5)+" ");
+               a1.append("사용목적 : "+rs.getString(6)+"\n");
+            }
+         }catch(SQLException e1)
+         {
+            a1.setText(e1.toString());
+         }
+      }
+      if (e.getSource() == j8) {    //종료
+         System.exit(0);
+      }
+   }
+DB 커낵트 부분
+
+public static Connection makeConnect()
+
+{
+
+   String url = "jdbc:mysql://localhost/student";
+
+   String id = "root";
+
+   String password = "1234";
+
+   Connection con = null;
+
+   try {
+
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      System.out.println("드라이버 적재 성공");
+
+      con = DriverManager.getConnection(url, id, password);
+
+      System.out.println("데이터베이스 연결 성공");
+
+         
+
+   }catch(ClassNotFoundException e)
+
+   {
+
+      System.out.println("드라이버를 찾을 수 없습니다.");
+
+      e.printStackTrace();
+
+   }catch(SQLException e)
+
+   {
+
+         System.out.println("연결에 실패하였습니다.");
+
+   }
+
+   return con;
+
+}
