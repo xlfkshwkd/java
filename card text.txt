@@ -1,0 +1,491 @@
+package credit;
+import java.util.*;
+public class Credit {
+   String ccnr;   //카드 번호
+   String author; //소유자
+   String date;   //사용일시
+   int use;       //사용금액
+   int temp = 0;  //임시변수
+   String pl;     //사용장소
+   String go;     //사용목적
+   String ccso;   //카드종류
+   
+   Credit(String nr, String au, String d, int us, String p, String g, String so){
+      this.ccnr=nr; this.author=au; this.date=d; this.use=us; this.pl=p; this.go=g; this.ccso=so;
+   }
+   
+   int getuse(){
+      return this.us;
+   }
+   
+   String out() {
+      return("카드번호: " + ccnr + " 소유자: " + author +" 사용일시: " + date +" 사용금액: " + use +
+            "\n 사용장소: " + pl +" 사용목적: " + go +"카드종류: " + ccso);
+   }
+   String getccnr()
+   {
+      return this.ccnr;
+   }
+   String getauthor()
+   {
+      return this.author;
+   }
+   String getdate()
+   {
+      return this.date;
+   }
+   String getpl()
+   {
+      return this.pl;
+   }
+   String getgo()
+   {
+      return this.go;
+   }
+   String getccso()
+   {
+      return this.ccso;
+   }
+
+
+}
+
+
+아이템리스너 
+ 콤보박스
+ number = new JComboBox();
+ number.addItem("카드번호1");
+ number.addItem("카드번호2");
+ number.addItemListener(this);
+ number.addActionListener(this);  
+
+ 라디오박스
+ r1 = new JRadioButton("Master");
+
+ r2 = new JRadioButton("Visa");
+
+ r3 = new JRadioButton("기타");
+
+ ButtonGroup pn = new ButtonGroup();
+ pn.add(r1);
+
+ pn.add(r2);
+
+ pn.add(r3);
+
+ r1.addItemListener(this);
+ r2.addItemListener(this);
+ r3.addItemListener(this); 
+
+ p3.add(r1);
+
+ p3.add(r2);
+
+ p3.add(r3);
+
+ Border border = BorderFactory.createTitledBorder("카드종류");
+
+ p3.setBorder(border);
+
+아이템
+
+public void itemStateChanged(ItemEvent e) {
+
+
+
+     
+
+
+
+      if(e.getItem()==number) {
+
+         
+
+         year=(String)number.getSelectedItem();
+
+      }
+
+
+
+      if(e.getItem() instanceof JRadioButton) {
+
+
+
+         if(r1.isSelected()) {
+
+               ccso="Master";
+
+            }
+
+         
+
+           if (r2.isSelected()) {
+
+               ccso="Visa";
+
+           }
+
+           
+
+           if (r3.isSelected()) {
+
+               ccso="기타";
+
+           }
+
+      }
+
+   }
+
+액션리스너
+
+ public void actionPerformed(ActionEvent e) {
+
+
+
+      if(e.getSource()==j1) // 버튼 1번 arrayList에 저장
+      {
+       a1.setText("");
+       ccnr =(String)number.getSelectedItem();   
+       author = t1.getText();
+            date = t2.getText();
+              use  = Integer.parseInt(t3.getText());
+            pl  = t4.getText();
+            go = t5.getText();
+           if(Integer.parseInt(t3.getText() > 1000000 || Integer.parseInt(t3.getText() < 10) {
+              a1.setText("금액이 잘못입력되었습니다");
+           }
+
+
+           else {
+
+
+
+              cr[c]=new Credit(ccnr, author, date, use, pl, go, ccso);
+
+              c++;
+
+
+
+           }
+
+
+
+      }
+
+
+
+
+
+
+
+      else if (e.getSource() == j2) {  // 계산
+         if(c == tmp)
+         {
+            a1.setText("");
+            a1.append("총 사용금액은 " +cr[c].getuse()+"입니다");
+         }
+         else
+         {
+            sum=0;
+            for(int i=0; i<c; i++) {
+            sum=cr[i].getuse();
+            }
+         a1.setText("");
+         a1.append("총 사용금액은 "+sum+"입니다");
+         tmp++;
+         }
+         
+      }
+
+
+         
+
+
+
+
+
+
+
+      if (e.getSource() == j3) {  // ArrayList 출력
+         a1.setText("");
+         for(int i=0; i<c; i++) {
+           a1.append(rf[i].out()+"\n");
+         }
+      }
+
+      if (e.getSource() == j4) { //파일저장
+   {
+
+      try{
+
+                  FileWriter fw = new FileWriter("save.txt",true);    
+
+                  BufferedWriter bf = new BufferedWriter(fw);
+
+                 
+         for(int = 0; i < c; i++)
+         {
+            
+                        bf.write(cr[i].out());
+
+                        
+
+                 
+
+                  bf.close();       
+
+
+                  FileReader fr = new FileReader("save.txt");    
+
+                  BufferedReader br = new BufferedReader(fr);    
+
+                  String str=null;
+
+                 
+
+                  while((str = br.readLine())!=null){
+
+                      System.out.println(str);
+
+                  }
+
+                 
+
+                  br.close();    
+
+                  }catch(Exception e1){
+
+                  System.out.println(e1.toString());
+
+                  }
+
+         }
+
+      if (e.getSource == j5) { //파일 출력
+
+          try {
+
+             FileReader fr = new FileReader("save.txt");
+
+             BufferedReader br = new BufferedReader(fr);
+
+             a.setText("");
+
+             String tmp = null;
+
+             while((tmp = br.readLine()) != null)
+
+             {
+
+                a.append(tmp+"\n");
+
+                System.out.println(tmp);
+
+             }
+
+             br.close();
+
+          }catch(Exception e2)
+
+          {
+
+             a.setText(e2.toString());
+
+          }
+
+          
+
+         }
+
+      }
+
+   if (e.getSource() == j6) { //DB 저장
+
+      Connection con = makeConnect();
+
+      try {
+
+            Statement stmt = con.createStatement();
+
+            String s = "INSERT INTO student values ";
+
+            s += "(\""+ cr[c].getccnr() + "\",\"" + cr[c].getauthor() + "\"," + cr[c].getdate() + "," +cr[c].getuse() + "," + cr[c].getpl(); + ","+cr[c].getgo()+","+cr[c].getccso()+");";
+
+            int i = stmt.executeUpdate(s);
+
+            if(i == 1) a1.setText("레코드 추가 성공");
+
+            else a1.setText("레코드 추가 실패");
+
+         }catch(SQLException e1)
+
+         {
+
+            a1.setText(e1.toString());
+
+         }
+
+      }
+   if(e.getSource() == j7) //DB 출력
+
+      {
+
+         a1.setText("");
+
+         Connection con = makeConnect();
+
+         try {
+
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = null;
+
+            String s = "select * from student";
+
+            
+
+            rs = stmt.executeQuery(s);
+
+            while(rs.next())
+
+            {
+
+               
+
+               a1.append("카드번호 : "+rs.getString(1)+" ");
+
+               a1.append("소유자 : "+rs.getString(2)+" ");
+
+               a1.append("사용일시 : "+rs.getString(3)+" ");
+
+               a1.append("사용금액 : "+rs.getInt(4)+" ");
+
+               a1.append("사용업소 : "+rs.getString(5)+" ");
+
+                    a1.append("사용목적 : "+rs.getString(6)+" ");
+
+                    a1.append("카드종류 : "+rs.getString(7)+"\n");
+
+            }
+
+            
+
+         }catch(SQLException e1)
+
+         {
+
+            a1.setText(e1.toString());
+
+         }
+
+      }
+    if(e.getSource() == j8)  //DB 검색
+
+      {
+
+         a1.setText("");
+
+         Connection con = makeConnect();
+
+         try {
+
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = null;
+
+            String s = "select * from student where ccnr = "+t6.getText();
+
+            
+
+            rs = stmt.executeQuery(s);
+
+            while(rs.next())
+
+            {
+
+               
+
+               a1.append("카드번호 : "+rs.getString(1)+" ");
+
+               a1.append("소유자 : "+rs.getString(2)+" ");
+
+               a1.append("사용일시 : "+rs.getString(3)+" ");
+
+               a1.append("사용금액 : "+rs.getInt(4)+" ");
+
+               a1.append("사용업소 : "+rs.getString(5)+" ");
+
+                    a1.append("사용목적 : "+rs.getString(6)+" ");
+
+                    a1.append("카드종류 : "+rs.getString(7)+"\n");
+
+            }
+
+            
+
+         }catch(SQLException e1)
+
+         {
+
+            a.setText(e1.toString());
+
+         }
+
+      }
+
+      if (e.getSource() == j9) {    //종료
+         System.exit(0);
+      }
+
+
+   }
+
+
+
+
+DB 커낵트 부분
+
+public static Connection makeConnect()
+
+{
+
+   String url = "jdbc:mysql://localhost/student";
+
+   String id = "root";
+
+   String password = "1234";
+
+   Connection con = null;
+
+   try {
+
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      System.out.println("드라이버 적재 성공");
+
+      con = DriverManager.getConnection(url, id, password);
+
+      System.out.println("데이터베이스 연결 성공");
+
+         
+
+   }catch(ClassNotFoundException e)
+
+   {
+
+      System.out.println("드라이버를 찾을 수 없습니다.");
+
+      e.printStackTrace();
+
+   }catch(SQLException e)
+
+   {
+
+         System.out.println("연결에 실패하였습니다.");
+
+   }
+
+   return con;
+
+}
