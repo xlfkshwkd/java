@@ -1,0 +1,62 @@
+import java.util.Random;
+import java.util.Scanner;
+
+import static java.lang.Math.random;
+import static java.lang.Math.round;
+
+public class exam01 {
+    public static void main(String[] args) {
+
+
+        System.out.println("몇개의 난수를 발생 시킬것인가요 ");
+        Scanner in = new Scanner(System.in); //
+        int n = in.nextInt();
+
+        if (n <= 1) {
+            System.out.println("하나이상은 넣어주던가...");
+        } else {
+            int[] num = new int[n]; //배열 생성
+            Random rd = new Random(); //랜점 숫자 초기화
+
+            for (int i = 0; i < n; i++) {
+                num[i] = rd.nextInt(100);
+            }
+
+            for (int i = 0; i < n; i++) {
+                System.out.print(num[i] + "  ");
+            }
+            int a = 0;
+
+            for (int i = 0; i < n; i++) { //첫번째 배열
+                for (int j = i + 1; j < n; j++) { //두번째 배열
+                    if (num[i] <= num[j]) {
+                        int temp = num[i]; //위치교환
+                        num[i] = num[j];
+                        num[j] = temp;
+                    }
+                }
+            }
+            System.out.print("\n");
+            for (int i = 0; i < n; i++) {
+                System.out.print(num[i] + "  ");  //배열 출력
+            }
+            System.out.print("\n");
+
+            int num2 =0;  //초기화
+
+            if (num.length%2==0) {
+                //짝수
+                num2=num.length/2;
+                System.out.println(num[num2-1] + " " + num[num2]);
+
+            } else {
+                //홀수
+                num2=num.length/2;
+                System.out.println(num[num2]);
+
+            }
+
+
+        }
+    }
+}
