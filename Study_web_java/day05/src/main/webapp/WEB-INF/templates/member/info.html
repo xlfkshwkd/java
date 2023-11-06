@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>info....</title>
+</head>
+<body>
+<th:block th:object="${member}">
+    <dl>
+        <dt>회원정보</dt>
+        <dd th:text="${member.userNo}"></dd>
+    </dl>
+    <dl>
+        <dt>아이디</dt>
+        <dd>[[*{userId}]]</dd>
+    </dl>
+    <dl>
+        <dt>비번</dt>
+        <dd th:text="${member.userPw}"></dd>
+    </dl>
+
+    <dl>
+        <dt>이름</dt>
+        <dd th:text="*{userNm}"></dd>
+    </dl>
+    <dl>
+        <dt>이름</dt>
+        <dd th:text="*{email}"></dd>
+    </dl>
+
+</th:block>
+
+</body>
+
+</html>
+
