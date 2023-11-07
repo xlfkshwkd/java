@@ -1,0 +1,50 @@
+
+아래는 간단한 주사위 게임을 Java로 구현한 예시입니다. 이 게임은 1부터 6까지의 주사위 값을 사용하여 플레이어가 30칸에 도착하는 것을 목표로 합니다. 이 코드는 콘솔에서 실행되며 각 플레이어는 번갈아가며 주사위를 굴립니다.
+
+java
+Copy code
+import java.util.Scanner;
+
+public class DiceGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int player1Position = 0;
+        int player2Position = 0;
+        int winningPosition = 30;
+
+        boolean player1Turn = true;
+
+        while (player1Position < winningPosition && player2Position < winningPosition) {
+            if (player1Turn) {
+                System.out.println("Player 1's turn. Press enter to roll the dice.");
+                scanner.nextLine();
+                int diceValue = rollDice();
+                player1Position = movePlayer(player1Position, diceValue);
+                System.out.println("Player 1 rolled a " + diceValue + ". Player 1 is at position " + player1Position + "\n");
+            } else {
+                System.out.println("Player 2's turn. Press enter to roll the dice.");
+                scanner.nextLine();
+                int diceValue = rollDice();
+                player2Position = movePlayer(player2Position, diceValue);
+                System.out.println("Player 2 rolled a " + diceValue + ". Player 2 is at position " + player2Position + "\n");
+            }
+            player1Turn = !player1Turn;
+        }
+
+        if (player1Position >= winningPosition) {
+            System.out.println("Player 1 wins!");
+        } else {
+            System.out.println("Player 2 wins!");
+        }
+    }
+
+    public static int rollDice() {
+        return (int) (Math.random() * 6) + 1;
+    }
+
+    public static int movePlayer(int position, int diceValue) {
+        int newPosition = position + diceValue;
+        return newPosition <= 30 ? newPosition : position;
+    }
+}
