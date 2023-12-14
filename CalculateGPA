@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class CalculateGPA {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int numCourses = 20;  // 전공 과목 수
+
+        double totalCredit = 0.0;
+        double totalGradePoint = 0.0;
+
+        for (int i = 0; i < numCourses; i++) {
+            String courseInfo = scanner.nextLine();
+            String[] tokens = courseInfo.split(" ");
+
+            String courseName = tokens[0];
+            double credit = Double.parseDouble(tokens[1]);
+            String grade = tokens[2];
+
+            if (!grade.equals("P")) {  // P/F 과목은 계산에서 제외
+                double gradePoint = getGradePoint(grade);
+                totalCredit += credit;
+                totalGradePoint += credit * gradePoint;
+            }
+        }
+
+        double gpa = totalGradePoint / totalCredit;
+
+        System.out.printf("%.6f\n", gpa);
+    }
+
+    private static double getGradePoint(String grade) {
+        switch (grade) {
+            case "A+":
+                return 4.5;
+            case "A0":
+                return 4.0;
+            case "B+":
+                return 3.5;
+            case "B0":
+                return 3.0;
+            case "C+":
+                return 2.5;
+            case "C0":
+                return 2.0;
+            case "D+":
+                return 1.5;
+            case "D0":
+                return 1.0;
+            case "F":
+                return 0.0;
+            default:
+                return 0.0;
+        }
+    }
