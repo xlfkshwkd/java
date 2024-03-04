@@ -1,0 +1,43 @@
+import java.util.Random;
+
+public class CubeSimulator {
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        
+        System.out.println("큐브 돌리기 시뮬레이터를 시작합니다...");
+        
+        // 큐브 종류와 확률 설정
+        String[] cubes = {"에픽 포텐셜 큐브", "유니크 포텐셜 큐브", "레전드리 포텐셜 큐브"};
+        double[] cubeChances = {0.5, 0.3, 0.2}; // 각 큐브의 확률
+        
+        // 큐브를 돌리기 위해 랜덤 값 생성
+        double randomValue = random.nextDouble();
+        
+        // 큐브 돌렸을 때 결과 출력
+        System.out.println("랜덤 값: " + randomValue);
+        System.out.println("결과: ");
+        
+        for (int i = 0; i < cubes.length; i++) {
+            if (randomValue < cubeChances[i]) {
+                System.out.println("축하합니다! " + cubes[i] + " 획득!");
+                if (i == 2) { // 레전더리 포텐셜 큐브일 때 추가 옵션 획득
+                    String[] legendaryOptions = {"보스 공격력 1%", "공격력 2%", "데미지 5%"};
+                    double[] legendaryChances = {0.01, 0.02, 0.05}; // 레전더리 옵션의 확률
+                    double legendaryRandomValue = random.nextDouble();
+                    for (int j = 0; j < legendaryOptions.length; j++) {
+                        if (legendaryRandomValue < legendaryChances[j]) {
+                            System.out.println("추가 옵션 획득: " + legendaryOptions[j]);
+                            break;
+                        } else {
+                            legendaryRandomValue -= legendaryChances[j];
+                        }
+                    }
+                }
+                break;
+            } else {
+                randomValue -= cubeChances[i];
+            }
+        }
+    }
+}
