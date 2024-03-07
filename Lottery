@@ -1,0 +1,37 @@
+import java.util.Random;
+
+public class Lottery {
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        
+        System.out.println("복권 프로그램을 시작합니다...");
+        
+        // 복권 종류, 상금, 확률 설정
+        String[] lotteries = {"A 복권", "B 복권", "C 복권"};
+        int[] prizes = {50000, 30000, 10000}; // 각 복권의 상금
+        double[] prizeChances = {0.02, 0.03, 0.05}; // 각 복권의 당첨 확률
+        
+        // 랜덤 값 생성
+        double randomValue = random.nextDouble();
+        
+        // 복권 구매 및 결과 출력
+        System.out.println("랜덤 값: " + randomValue);
+        System.out.println("복권 구매 결과: ");
+        
+        for (int i = 0; i < lotteries.length; i++) {
+            if (randomValue < prizeChances[i]) {
+                System.out.println("축하합니다! " + lotteries[i] + "에 당첨되셨습니다!");
+                System.out.println("상금: " + prizes[i] + "원을 획득하셨습니다.");
+                break;
+            } else {
+                randomValue -= prizeChances[i];
+            }
+        }
+        
+        // 당첨되지 않았을 경우
+        if (randomValue >= 0) {
+            System.out.println("아쉽지만 당첨되지 않았습니다. 다음 기회에 다시 도전해보세요!");
+        }
+    }
+}
