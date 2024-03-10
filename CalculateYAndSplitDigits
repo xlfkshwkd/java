@@ -1,0 +1,39 @@
+public class CalculateYAndSplitDigits {
+
+    public static void main(String[] args) {
+        int x = 1;
+        int y;
+        int digit1, digit2, digit3, digit4;
+
+        System.out.println("Y = X * X 계산 결과 및 각 자리수 분리 중 더한 값이 Y와 같은 경우:");
+        for (int i = 0; i < 1000; i++) {
+            y = x * x;
+            if (y < 10) {
+                digit1 = 0;
+                digit2 = 0;
+                digit3 = 0;
+                digit4 = y;
+            } else if (y < 100) {
+                digit1 = 0;
+                digit2 = 0;
+                digit3 = y / 10;
+                digit4 = y % 10;
+            } else if (y < 1000) {
+                digit1 = 0;
+                digit2 = y / 100;
+                digit3 = (y / 10) % 10;
+                digit4 = y % 10;
+            } else {
+                digit1 = y / 1000;
+                digit2 = (y / 100) % 10;
+                digit3 = (y / 10) % 10;
+                digit4 = y % 10;
+            }
+
+            if (digit1 + digit2 + digit3 + digit4 == y) {
+                System.out.println("X = " + x + ", Y = " + y + ", 자리수 분리: " + digit1 + ", " + digit2 + ", " + digit3 + ", " + digit4);
+            }
+            x++;
+        }
+    }
+}
