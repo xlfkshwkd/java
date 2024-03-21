@@ -1,0 +1,37 @@
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+app.post('/api/find-squirrel', (req, res) => {
+  let squirrelHole = Math.floor(Math.random() * 9) + 1;
+  let attempts = 0;
+  let cost = 0;
+
+  while (attempts < 9) {
+    let chosenHole = Math.floor(Math.random() * 9) + 1;
+    attempts++;
+
+    if (chosenHole === squirrelHole) {
+      res.status(200).json({
+        message: "다람쥐를 찾았습니다!",
+        attempts: attempts,
+        cost: cost
+      });
+      return;
+    } else {
+      cost += 100;
+    }
+  }
+
+  res.status(400).json({
+    message: "모든 시도에 실패했습니다. 다람쥐를 찾지 못했습니다.",
+    attempts: attempts,
+    cost: cost
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
