@@ -1,0 +1,34 @@
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+app.post('/find-squirrel', (req, res) => {
+  let squirrelHole = Math.floor(Math.random() * 9) + 1;
+  let attempts = 0;
+  let cost = 0;
+  let rewards = 0;
+  let history = [];
+
+  while (attempts < 3) {
+    let chosenHole = Math.floor(Math.random() * 9) + 1;
+    attempts++;
+
+    if (chosenHole === squirrelHole) {
+      history.push({ hole: chosenHole, success: true });
+      rewards += 200; // 다람쥐를 찾으면 추가 보상
+      res.json({ success: true, message: "다람쥐를 찾았습니다!", history, attempts, cost, rewards });
+      return;
+    } else {
+      cost += 100; // 선택할 때마다 100원 비용
+      history.push({ hole: chosenHole, success: false });
+    }
+  }
+
+  res.json({ success: false, message: "최대 시도 횟수를 초과했습니다. 다람쥐를 찾지 못했습니다.", history, attempts, cost, rewards });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
