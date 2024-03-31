@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class PuzzleGame {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("퍼즐판의 크기를 입력하세요 (n m): ");
+        int n = scanner.nextInt(); // 퍼즐판의 높이
+        int m = scanner.nextInt(); // 퍼즐판의 너비
+
+        if (n < 1 || m < 1 || n > 15 || m > 15) {
+            System.out.println("잘못된 입력입니다. 퍼즐판의 크기는 1부터 15까지의 숫자만 가능합니다.");
+            return;
+        }
+
+        int[] puzzleSizes = {1, 2, 8, 16}; // 퍼즐 조각의 크기 (1x1, 2x2, 4x2, 4x4)
+        int[][] puzzleCounts = new int[n][m]; // 가능한 경우의 수를 저장할 배열
+
+        for (int puzzleSize : puzzleSizes) {
+            for (int i = 0; i <= n - puzzleSize; i++) {
+                for (int j = 0; j <= m - puzzleSize; j++) {
+                    // 퍼즐 조각을 놓을 수 있는 위치에서 경우의 수 증가
+                    puzzleCounts[i][j]++;
+                }
+            }
+        }
+
+        double totalPossibilities = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                totalPossibilities += puzzleCounts[i][j];
+            }
+        }
+
+        // n이 4 이상이고 m이 2 이상인 경우에는 경우의 수를 반올림
+        if (n >= 4 && m >= 2) {
+            totalPossibilities = Math.round(totalPossibilities);
+        } else {
+            // n이 4 미만이고 m이 2 미만인 경우에는 경우의 수를 반내림
+            totalPossibilities = Math.floor(totalPossibilities);
+        }
+
+        // 결과를 0.5로 나누어줌
+        totalPossibilities *= 0.5;
+
+        // 결과를 정수로 변환하여 출력
+        int roundedPossibilities = (int) totalPossibilities;
+        System.out.println("퍼즐판(" + n + "x" + m + ")을 4종류의 퍼즐로 맞출 수 있는 경우의 수: " + roundedPossibilities);
+
+        scanner.close();
+    }
+}
