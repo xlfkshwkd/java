@@ -1,0 +1,104 @@
+import java.util.Scanner;
+
+public class Main {
+    private static int n, m;
+    private static int[][] puzzle;
+    private static int[] pieces = {1, 1, 0, 2}; // 조각의 개수 대신 조각의 크기를 직접 사용
+    private static int answer = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        n = scanner.nextInt();
+        m = scanner.nextInt();
+        puzzle = new int[n][m];
+
+        // 퍼즐 맞추기
+        solve(0, 0);
+
+        // 경우의 수 출력
+        System.out.println(answer);
+    }
+
+    private static void solve(int row, int col) {
+        // 퍼즐판을 완전히 채웠으면 경우의 수 증가
+        if (row == n) {
+            answer++;
+            return;
+        }
+
+        // 현재 칸이 이미 채워져 있으면 다음 칸으로 이동
+        if (puzzle[row][col] != 0) {
+            solve(row + (col + 1) / m, (col + 1) % m);
+            return;
+        }
+
+        // 4가지 조각을 순서대로 놓아보며 퍼즐 맞추기
+        for (int i = 0; i < 4; i++) {
+            if (pieces[i] > 0) {
+                // 조각 크기만큼 빈 공간이 있는지 확인
+                if (isAvailable(row, col, i)) {
+                    // 놓을 수 있다면 조각 놓고 다음 칸으로 이동
+                    placePiece(row, col, i);
+                    solve(row + (col + 1) / m, (col + 1) % m);
+                    // 놓았던 조각 제거
+                    removePiece(row, col, i);
+                }
+            }
+        }
+    }
+
+    private static boolean isAvailable(int row, int col, int piece) {
+        int pieceWidth = getPieceWidth(piece);
+        int pieceHeight = getPieceHeight(piece);
+
+        // 퍼즐판 밖으로 나가는 경우
+        if (col + pieceWidth > m || row + pieceHeight > n) {
+            return false;
+        }
+
+        // 놓을 위치에 이미 조각이 있는 경우
+        for (int i = row; i < row + pieceHeight; i++) {
+            for (int j = col; j < col + pieceWidth; j++) {
+                if (puzzle[i][j] != 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private static void placePiece(int row, int col, int piece) {
+        int pieceWidth = getPieceWidth(piece);
+        int pieceHeight = getPieceHeight(piece);
+
+        for (int i = row; i < row + pieceHeight; i++) {
+            for (int j = col; j < col + pieceWidth; j++) {
+                puzzle[i][j] = piece + 1;
+            }
+        }
+
+        pieces[piece]--;
+    }
+
+    private static void removePiece(int row, int col, int piece) {
+        int pieceWidth = getPieceWidth(piece);
+        int pieceHeight = getPieceHeight(piece);
+
+        for (int i = row; i < row + pieceHeight; i++) {
+            for (int j = col; j < col + pieceWidth; j++) {
+                puzzle[i][j] = 0;
+            }
+        }
+
+        pieces[piece]++;
+    }
+
+    private static int getPieceWidth(int piece) {
+        return piece % 2 == 0 ? 2 : 4;
+    }
+
+    private static int getPieceHeight(int piece) {
+        return piece < 2 ? 1 : 2;
+    }
+}
