@@ -1,0 +1,96 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class BeadGame {
+
+    public static List<String> generateRockPaperScissorsCombinations(int length) {
+        List<String> choices = Arrays.asList("가위", "바위", "보");
+        List<String> combinations = new ArrayList<>();
+        generateCombinations(choices, length, "", combinations);
+        return combinations;
+    }
+
+    private static void generateCombinations(List<String> choices, int length, String current, List<String> combinations) {
+        if (length == 0) {
+            combinations.add(current);
+            return;
+        }
+        for (String choice : choices) {
+            generateCombinations(choices, length - 1, current + choice, combinations);
+        }
+    }
+
+    public static int countLosingPossibilities(int bead1, int bead2, int games) {
+        List<String> combinations = generateRockPaperScissorsCombinations(games);
+        int count = 0;
+
+        for (String combination : combinations) {
+            int player1Beads = bead1;
+            int player2Beads = bead2;
+
+            boolean isFirstGameDraw = false; // 첫 번째 게임이 무승부인지 확인
+
+            for (char move : combination.toCharArray()) {
+                String result = null;
+                if (move == '가') {
+                    result = player2Beads >= 1 ? "이김" : "짐";
+                } else if (move == '바') {
+                    result = player2Beads >= 1 ? "이김" : "짐";
+                } else if (move == '보') {
+                    result = player2Beads >= 1 ? "이김" : "짐";
+                }
+
+                if ("이김".equals(result)) {
+                    player1Beads++;
+                    player2Beads--;
+                } else if ("짐".equals(result)) {
+                    player1Beads--;
+                    player2Beads++;
+                }
+
+                if (player1Beads <= 0 || player2Beads <= 0) {
+                    count++;
+                    break;
+                }
+
+                // 첫 번째 게임이 무승부인 경우
+                if (player1Beads == bead1 && player2Beads == bead2) {
+                    isFirstGameDraw = true;
+                }
+            }
+
+            // 첫 번째 게임이 무승부이고, 게임이 종료된 후에도 무승부이면 경우의 수에서 제외
+            if (isFirstGameDraw && player1Beads == bead1 && player2Beads == bead2) {
+                count--;
+            }
+        }
+
+        // 모든 경우의 수를 포함하므로, 플레이어 2가 모든 구슬을 잃을 수 있는 경우의 수도 더해준다.
+        return count * 2;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("구슬 게임을 시작합니다.");
+        System.out.print("플레이어 1의 구슬 개수: ");
+        int bead1 = scanner.nextInt();
+
+        System.out.print("플레이어 2의 구슬 개수: ");
+        int bead2 = scanner.nextInt();
+
+        System.out.print("게임 수: ");
+        int games = scanner.nextInt();
+
+        int result = countLosingPossibilities(bead1, bead2, games);
+        if (result == 0) {
+            System.out.println("아무도 구슬을 모두 잃지 않는 경우");
+        } else {
+            System.out.println("한 플레이어가 모든 구슬을 잃을 수 있는 경우의 수: " + result);
+        }
+
+        scanner.close();
+    }
+}
